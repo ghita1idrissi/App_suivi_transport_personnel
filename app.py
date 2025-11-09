@@ -502,49 +502,49 @@ def shift_header(title: str, url: str):
 # =========================
 
 if entreprise == "Logiprod":
-    shift_header("🕐 Normal", "https://www.google.com/maps/d/edit?hl=fr&mid=1AWwS0Fh7kGqF45LLthDnNUw98p6ZhOA&ll=33.5164216889364%2C-7.668005000000008&z=11")
+    shift_header("🕐 Normal", "https://www.google.com/maps/d/edit?mid=1JdMGdu_6D-z0vCYsPeEmzNcr_cPTxqU&usp=sharing")
     table_normal = prepare_shift_table(df_normal_site, "normal")
     st.dataframe(table_normal, use_container_width=True, hide_index=True)
 
-    shift_header("🕐 Shift 1", "https://www.google.com/maps/d/edit?hl=fr&mid=1ORX0VuY0VO8heJBnkg7sm3IkfZqbM9s&ll=33.47766561562251%2C-7.736224999999992&z=12")
+    shift_header("🕐 Shift 1", "https://www.google.com/maps/d/edit?mid=1cQiREz3cQrabhcW4HT7tEvjh7pbkqf4&usp=sharing")
     table1 = prepare_shift_table(df_shift1_site, "shift 1")
     st.dataframe(table1, use_container_width=True, hide_index=True)
 
-    shift_header("🕐 Shift 2", "https://www.google.com/maps/d/edit?hl=fr&mid=1CgnWy11ud3Zyuow2S587sD8BQsdowQo&ll=33.454163890190735%2C-7.728035000000006&z=12")
+    shift_header("🕐 Shift 2", "https://www.google.com/maps/d/edit?mid=1CgnWy11ud3Zyuow2S587sD8BQsdowQo&usp=sharing")
     table2 = prepare_shift_table(df_shift2_site, "shift 2")
     st.dataframe(table2, use_container_width=True, hide_index=True)
 
 
 if entreprise == "Casa hub":
-    shift_header("🕐 Shift 1", "https://www.google.com/maps/d/edit?hl=fr&mid=1o3MrlHn32N8xH_PWpIsxtd163sYAshM&ll=33.515104057542175%2C-7.642830999999996&z=11")
+    shift_header("🕐 Shift 1", "https://www.google.com/maps/d/edit?mid=1o3MrlHn32N8xH_PWpIsxtd163sYAshM&usp=sharing")
     table1 = prepare_shift_table(df_shift1_site, "shift 1")
     st.dataframe(table1, use_container_width=True, hide_index=True)
 
-    shift_header("🕐 Shift 2", "https://www.google.com/maps/d/edit?hl=fr&mid=1gVo5H_-DJbb5mUe7vgdh-nruCKeiEos&ll=33.56991600416464%2C-7.599525499999997&z=10")
+    shift_header("🕐 Shift 2", "https://www.google.com/maps/d/edit?mid=1EIHTJzJQ6k2pfrYY37GG4xCW4AE-ADs&usp=sharing")
     table2 = prepare_shift_table(df_shift2_site, "shift 2")
     st.dataframe(table2, use_container_width=True, hide_index=True)
 
 
 if entreprise == "HMI":
-    shift_header("🕐 Normal", "https://www.google.com/maps/d/edit?hl=fr&mid=19yMtXMhZd1EVtHXctcFAr2ilP3IiNTs&ll=33.48111573873554%2C-7.4896835&z=10")
+    shift_header("🕐 Normal", "https://www.google.com/maps/d/edit?mid=19yMtXMhZd1EVtHXctcFAr2ilP3IiNTs&usp=sharing")
     table_normal = prepare_shift_table(df_normal_site, "normal")
     st.dataframe(table_normal, use_container_width=True, hide_index=True)
 
-    shift_header("🕐 Shift 1", "https://www.google.com/maps/d/edit?hl=fr&mid=1-VcA0vHT4PFN8RTvyYoDPypTF01zkc4&ll=33.625196155892226%2C-7.468961&z=12")
+    shift_header("🕐 Shift 1", "https://www.google.com/maps/d/edit?mid=1-VcA0vHT4PFN8RTvyYoDPypTF01zkc4&usp=sharing")
     table1 = prepare_shift_table(df_shift1_site, "shift 1")
     st.dataframe(table1, use_container_width=True, hide_index=True)
 
-    shift_header("🕐 Shift 2", "https://www.google.com/maps/d/edit?hl=fr&mid=1l7Fq0MjTwsa5JrMuda4SjaYJvl55zrE&ll=33.62434149775241%2C-7.442983499999993&z=12")
+    shift_header("🕐 Shift 2", "https://www.google.com/maps/d/edit?mid=1l7Fq0MjTwsa5JrMuda4SjaYJvl55zrE&usp=sharing")
     table2 = prepare_shift_table(df_shift2_site, "shift 2")
     st.dataframe(table2, use_container_width=True, hide_index=True)
 
-    shift_header("🕐 Shift 3", "https://www.google.com/maps/d/edit?hl=fr&mid=11ebs_NXb-dgNQyG_51BMMYaMsn6UtWk&ll=33.6677255772706%2C-7.378471999999998&z=15")
+    shift_header("🕐 Shift 3", "https://www.google.com/maps/d/edit?mid=11ebs_NXb-dgNQyG_51BMMYaMsn6UtWk&usp=sharing")
     table3 = prepare_shift_table(df_shift3_site, "shift 3")
     st.dataframe(table3, use_container_width=True, hide_index=True)
 
 
 if entreprise == "Steripharma":
-    shift_header("🕐 Normal", "https://www.google.com/maps/d/edit?hl=fr&mid=1QQhm5cxvGt1cA71B58WyaMO4COXREqc&ll=33.54532436835879%2C-7.6915027622070316&z=14")
+    shift_header("🕐 Normal", "https://www.google.com/maps/d/edit?mid=1QQhm5cxvGt1cA71B58WyaMO4COXREqc&usp=sharing")
     table1 = prepare_shift_table(df_normal_site, "normal")
     st.dataframe(table1, use_container_width=True, hide_index=True)
 
