@@ -16,6 +16,7 @@ TEXT_DARK = "#0E1117" # texte foncé sur fond vert
 
 
 
+
 st.markdown(f"""
 <style>
 /* --- Sidebar noir + séparation verte --- */
@@ -431,50 +432,121 @@ div[data-testid="stDataFrame"] {{
 </style>
 """, unsafe_allow_html=True)
 
+
+
+# if entreprise == "Logiprod":
+#     st.markdown("### 🕐 Normal [🗺](https://www.google.com/maps/d/edit?hl=fr&mid=1AWwS0Fh7kGqF45LLthDnNUw98p6ZhOA&ll=33.5164216889364%2C-7.668005000000008&z=11)", unsafe_allow_html=True)
+#     table_normal = prepare_shift_table(df_normal_site, "normal")
+#     st.dataframe(table_normal, use_container_width=True, hide_index=True)
+
+#     st.markdown("### 🕐 Shift 1 [🗺](https://www.google.com/maps/d/edit?hl=fr&mid=1ORX0VuY0VO8heJBnkg7sm3IkfZqbM9s&ll=33.47766561562251%2C-7.736224999999992&z=12)", unsafe_allow_html=True)
+#     table1 = prepare_shift_table(df_shift1_site, "shift 1")
+#     st.dataframe(table1, use_container_width=True, hide_index=True)
+
+#     st.markdown("### 🕐 Shift 2 [🗺](https://www.google.com/maps/d/edit?hl=fr&mid=1CgnWy11ud3Zyuow2S587sD8BQsdowQo&ll=33.454163890190735%2C-7.728035000000006&z=12)", unsafe_allow_html=True)
+#     table2 = prepare_shift_table(df_shift2_site, "shift 2")
+#     st.dataframe(table2, use_container_width=True, hide_index=True)
+
+# if entreprise == "Casa hub":
+#     st.markdown("### 🕐 Shift 1 [🗺](https://www.google.com/maps/d/edit?hl=fr&mid=1o3MrlHn32N8xH_PWpIsxtd163sYAshM&ll=33.515104057542175%2C-7.642830999999996&z=11)", unsafe_allow_html=True)
+#     table1 = prepare_shift_table(df_shift1_site, "shift 1")
+#     st.dataframe(table1, use_container_width=True, hide_index=True)
+
+#     st.markdown("### 🕐 Shift 2 [🗺](https://www.google.com/maps/d/edit?hl=fr&mid=1gVo5H_-DJbb5mUe7vgdh-nruCKeiEos&ll=33.56991600416464%2C-7.599525499999997&z=10)", unsafe_allow_html=True)
+#     table2 = prepare_shift_table(df_shift2_site, "shift 2")
+#     st.dataframe(table2, use_container_width=True, hide_index=True)
+
+# if entreprise == "HMI":
+#     st.markdown("### 🕐 Normal [🗺](https://www.google.com/maps/d/edit?hl=fr&mid=19yMtXMhZd1EVtHXctcFAr2ilP3IiNTs&ll=33.48111573873554%2C-7.4896835&z=10)", unsafe_allow_html=True)
+#     table_normal = prepare_shift_table(df_normal_site, "normal")
+#     st.dataframe(table_normal, use_container_width=True, hide_index=True)
+
+#     st.markdown("### 🕐 Shift 1 [🗺](https://www.google.com/maps/d/edit?hl=fr&mid=1-VcA0vHT4PFN8RTvyYoDPypTF01zkc4&ll=33.625196155892226%2C-7.468961&z=12)", unsafe_allow_html=True)
+#     table1 = prepare_shift_table(df_shift1_site, "shift 1")
+#     st.dataframe(table1, use_container_width=True, hide_index=True)
+
+#     st.markdown("### 🕐 Shift 2 [🗺](https://www.google.com/maps/d/edit?hl=fr&mid=1l7Fq0MjTwsa5JrMuda4SjaYJvl55zrE&ll=33.62434149775241%2C-7.442983499999993&z=12)", unsafe_allow_html=True)
+#     table2 = prepare_shift_table(df_shift2_site, "shift 2")
+#     st.dataframe(table2, use_container_width=True, hide_index=True)
+
+#     st.markdown("### 🕐 Shift 3 [🗺](https://www.google.com/maps/d/edit?hl=fr&mid=11ebs_NXb-dgNQyG_51BMMYaMsn6UtWk&ll=33.6677255772706%2C-7.378471999999998&z=15)", unsafe_allow_html=True)
+#     table3 = prepare_shift_table(df_shift3_site, "shift 3")
+#     st.dataframe(table3, use_container_width=True, hide_index=True)
+
+# if entreprise == "Steripharma":
+#     st.markdown("### 🕐 Normal [🗺](https://www.google.com/maps/d/viewer?mid=LIEN_MYMAPS_NORMAL)", unsafe_allow_html=True)
+#     table1 = prepare_shift_table(df_normal_site, "normal")
+#     st.dataframe(table1, use_container_width=True, hide_index=True)
+
+# --- Icône localisation (vert BLS). Mets fill="#FFD43B" si tu la veux jaune. ---
+MAP_ICON_SVG = """
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+     viewBox="0 0 24 24" fill="#7CC043" style="vertical-align:-3px;">
+  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5
+           c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5
+           s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+</svg>
+"""
+
+def shift_header(title: str, url: str):
+    st.markdown(f"""
+    <div style='display:flex;align-items:center;gap:10px;margin:6px 0;'>
+      <h3 style='margin:0;color:white;'>{title}</h3>
+      <a href="{url}" target="_blank" style="text-decoration:none;">{MAP_ICON_SVG}</a>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# =========================
+# Tes blocs, avec l'icône :
+# =========================
+
 if entreprise == "Logiprod":
-    st.markdown("### 🕐 Normal [🗺️](https://www.google.com/maps/d/edit?hl=fr&mid=1AWwS0Fh7kGqF45LLthDnNUw98p6ZhOA&ll=33.5164216889364%2C-7.668005000000008&z=11)", unsafe_allow_html=True)
+    shift_header("🕐 Normal", "https://www.google.com/maps/d/edit?hl=fr&mid=1AWwS0Fh7kGqF45LLthDnNUw98p6ZhOA&ll=33.5164216889364%2C-7.668005000000008&z=11")
     table_normal = prepare_shift_table(df_normal_site, "normal")
     st.dataframe(table_normal, use_container_width=True, hide_index=True)
 
-    st.markdown("### 🕐 Shift 1 [🗺️](https://www.google.com/maps/d/edit?hl=fr&mid=1ORX0VuY0VO8heJBnkg7sm3IkfZqbM9s&ll=33.47766561562251%2C-7.736224999999992&z=12)", unsafe_allow_html=True)
+    shift_header("🕐 Shift 1", "https://www.google.com/maps/d/edit?hl=fr&mid=1ORX0VuY0VO8heJBnkg7sm3IkfZqbM9s&ll=33.47766561562251%2C-7.736224999999992&z=12")
     table1 = prepare_shift_table(df_shift1_site, "shift 1")
     st.dataframe(table1, use_container_width=True, hide_index=True)
 
-    st.markdown("### 🕐 Shift 2 [🗺️](https://www.google.com/maps/d/edit?hl=fr&mid=1CgnWy11ud3Zyuow2S587sD8BQsdowQo&ll=33.454163890190735%2C-7.728035000000006&z=12)", unsafe_allow_html=True)
+    shift_header("🕐 Shift 2", "https://www.google.com/maps/d/edit?hl=fr&mid=1CgnWy11ud3Zyuow2S587sD8BQsdowQo&ll=33.454163890190735%2C-7.728035000000006&z=12")
     table2 = prepare_shift_table(df_shift2_site, "shift 2")
     st.dataframe(table2, use_container_width=True, hide_index=True)
+
 
 if entreprise == "Casa hub":
-    st.markdown("### 🕐 Shift 1 [🗺️](https://www.google.com/maps/d/edit?hl=fr&mid=1o3MrlHn32N8xH_PWpIsxtd163sYAshM&ll=33.515104057542175%2C-7.642830999999996&z=11)", unsafe_allow_html=True)
+    shift_header("🕐 Shift 1", "https://www.google.com/maps/d/edit?hl=fr&mid=1o3MrlHn32N8xH_PWpIsxtd163sYAshM&ll=33.515104057542175%2C-7.642830999999996&z=11")
     table1 = prepare_shift_table(df_shift1_site, "shift 1")
     st.dataframe(table1, use_container_width=True, hide_index=True)
 
-    st.markdown("### 🕐 Shift 2 [🗺️](https://www.google.com/maps/d/edit?hl=fr&mid=1gVo5H_-DJbb5mUe7vgdh-nruCKeiEos&ll=33.56991600416464%2C-7.599525499999997&z=10)", unsafe_allow_html=True)
+    shift_header("🕐 Shift 2", "https://www.google.com/maps/d/edit?hl=fr&mid=1gVo5H_-DJbb5mUe7vgdh-nruCKeiEos&ll=33.56991600416464%2C-7.599525499999997&z=10")
     table2 = prepare_shift_table(df_shift2_site, "shift 2")
     st.dataframe(table2, use_container_width=True, hide_index=True)
 
+
 if entreprise == "HMI":
-    st.markdown("### 🕐 Normal [🗺️](https://www.google.com/maps/d/edit?hl=fr&mid=19yMtXMhZd1EVtHXctcFAr2ilP3IiNTs&ll=33.48111573873554%2C-7.4896835&z=10)", unsafe_allow_html=True)
+    shift_header("🕐 Normal", "https://www.google.com/maps/d/edit?hl=fr&mid=19yMtXMhZd1EVtHXctcFAr2ilP3IiNTs&ll=33.48111573873554%2C-7.4896835&z=10")
     table_normal = prepare_shift_table(df_normal_site, "normal")
     st.dataframe(table_normal, use_container_width=True, hide_index=True)
 
-    st.markdown("### 🕐 Shift 1 [🗺️](https://www.google.com/maps/d/edit?hl=fr&mid=1-VcA0vHT4PFN8RTvyYoDPypTF01zkc4&ll=33.625196155892226%2C-7.468961&z=12)", unsafe_allow_html=True)
+    shift_header("🕐 Shift 1", "https://www.google.com/maps/d/edit?hl=fr&mid=1-VcA0vHT4PFN8RTvyYoDPypTF01zkc4&ll=33.625196155892226%2C-7.468961&z=12")
     table1 = prepare_shift_table(df_shift1_site, "shift 1")
     st.dataframe(table1, use_container_width=True, hide_index=True)
 
-    st.markdown("### 🕐 Shift 2 [🗺️](https://www.google.com/maps/d/edit?hl=fr&mid=1l7Fq0MjTwsa5JrMuda4SjaYJvl55zrE&ll=33.62434149775241%2C-7.442983499999993&z=12)", unsafe_allow_html=True)
+    shift_header("🕐 Shift 2", "https://www.google.com/maps/d/edit?hl=fr&mid=1l7Fq0MjTwsa5JrMuda4SjaYJvl55zrE&ll=33.62434149775241%2C-7.442983499999993&z=12")
     table2 = prepare_shift_table(df_shift2_site, "shift 2")
     st.dataframe(table2, use_container_width=True, hide_index=True)
 
-    st.markdown("### 🕐 Shift 3 [🗺️](https://www.google.com/maps/d/edit?hl=fr&mid=11ebs_NXb-dgNQyG_51BMMYaMsn6UtWk&ll=33.6677255772706%2C-7.378471999999998&z=15)", unsafe_allow_html=True)
+    shift_header("🕐 Shift 3", "https://www.google.com/maps/d/edit?hl=fr&mid=11ebs_NXb-dgNQyG_51BMMYaMsn6UtWk&ll=33.6677255772706%2C-7.378471999999998&z=15")
     table3 = prepare_shift_table(df_shift3_site, "shift 3")
     st.dataframe(table3, use_container_width=True, hide_index=True)
 
+
 if entreprise == "Steripharma":
-    st.markdown("### 🕐 Normal [🗺️](https://www.google.com/maps/d/viewer?mid=LIEN_MYMAPS_NORMAL)", unsafe_allow_html=True)
+    shift_header("🕐 Normal", "https://www.google.com/maps/d/edit?hl=fr&mid=1QQhm5cxvGt1cA71B58WyaMO4COXREqc&ll=33.54532436835879%2C-7.6915027622070316&z=14")
     table1 = prepare_shift_table(df_normal_site, "normal")
     st.dataframe(table1, use_container_width=True, hide_index=True)
 
-  
 st.divider()
 st.info("⚠️ = durée supérieure à 1h30min")
