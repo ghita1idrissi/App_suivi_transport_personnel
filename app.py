@@ -3,56 +3,163 @@ import pandas as pd
 import plotly.express as px
 import re
 import unicodedata
+import base64
 
 # ==============================
 # CONFIG
 # ==============================
 st.set_page_config(page_title="Dashboard Transport", layout="wide")
-st.markdown(
-    "<h1 style='text-align:center; color:white;'>🚍 Suivi du transport de personnel</h1>",
-    unsafe_allow_html=True
-)
+
+PRIMARY = "#7CC043"   # vert BLS (comme les cartes)
+DARK_BG = "#0B0F14"   # fond noir de la sidebar
+TEXT_DARK = "#0E1117" # texte foncé sur fond vert
+
+
+
+st.markdown(f"""
+<style>
+/* --- Sidebar noir + séparation verte --- */
+[data-testid="stSidebar"] {{
+  background-color: {DARK_BG} !important;
+  border-right: 2px solid {PRIMARY} !important;
+    border-top-right-radius: 18px;           /* ← ajuste le rayon ici */
+  border-bottom-right-radius: 18px;     
+   overflow: hidden;                        /* pour que le contenu suive la courbe */
+  position: relative;                      /* nécessaire pour le ::after ci-dessous */
+  box-shadow: 4px 0 14px rgba(0,0,0,.35);  /* (optionnel) un peu de profondeur */
+}}   
+
+
+/* --- Selectbox verte comme les cartes --- */
+[data-testid="stSidebar"] div[data-baseweb="select"] > div {{
+  background-color: {PRIMARY} !important;
+  color: {TEXT_DARK} !important;
+  border: 1px solid {PRIMARY} !important;
+  border-radius: 10px !important;
+  min-height: 42px;
+  font-weight: 600;
+}}
+/* Texte et icônes dans le select */
+[data-testid="stSidebar"] div[data-baseweb="select"] input,
+[data-testid="stSidebar"] div[data-baseweb="select"] span {{
+  color: {TEXT_DARK} !important;
+}}
+[data-testid="stSidebar"] div[data-baseweb="select"] svg {{
+  fill: {TEXT_DARK} !important;
+}}
+
+/* --- Menu déroulant (popup des options) --- */
+div[data-baseweb="popover"] [role="listbox"] {{
+  background-color: #101418 !important;
+  border: 1px solid {PRIMARY} !important;
+  border-radius: 10px !important;
+}}
+div[data-baseweb="popover"] [role="option"]:hover {{
+  background-color: rgba(124,192,67,0.15) !important;
+}}
+div[data-baseweb="popover"] [aria-selected="true"] {{
+  background-color: rgba(124,192,67,0.3) !important;
+}}
+</style>
+""", unsafe_allow_html=True)
+
+
+# charge le fichier image et l’encode en base64
+with open("logo2.png", "rb") as f:
+    logo_b64 = base64.b64encode(f.read()).decode()
+st.markdown(f"""
+<style>
+
+
+#header {{
+    display: flex;
+    align-items: center;
+    justify-content: center; /* ✅ Centre horizontalement */
+    background-color: #0E1117;
+    padding: 15px 30px;
+    border-bottom: 2px solid #7CC043;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    position: relative;
+}}
+#header-left {{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: absolute; /* ✅ Garde le logo à gauche */
+    left: 30px;
+}}
+#header-left img {{
+    height: 65px;
+}}
+#header h1 {{
+    color: white;
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0;
+    text-align: center;
+}}
+</style>
+
+<div id="header">
+    <div id="header-left">
+        <img src="data:image/png;base64,{logo_b64}" alt="logo" />    
+    </div>
+    <h1> Suivi du transport de personnel</h1>
+</div>
+""", unsafe_allow_html=True)
+
+
+
+# 
 st.markdown("""
 <style>
-/* Carte metric : fond blanc + contour bleu + arrondi + légère ombre */
 div[data-testid="stMetric"] {
-  background: #1769aa !important;
-  border: 2px solid #0a2d49 !important;
-  border-radius: 14px !important;
-  padding: 12px 14px !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+    background: linear-gradient(135deg, #7CC043 0%, #5BAA29 100%) !important;
+    border: none !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25) !important;
 }
 
-/* Libellé (ex: 🚐 Véhicules) */
-div[data-testid="stMetric"] span[data-testid="stMetricLabel"] {
-  color: #0a2d49 !important;
-  font-weight: 600 !important;
+/* Label */
+div[data-testid="stMetricLabel"] {
+    color: white !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    font-size: 15px !important;
 }
 
-/* Valeur (ex: 12) */
-div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
-  color: white !important;
+/* Valeur */
+div[data-testid="stMetricValue"] {
+    color: white !important;
+    font-weight: 900 !important;
+    font-size: 30px !important;
 }
 
-/* Delta (si tu l’utilises) */
-div[data-testid="stMetric"] div[data-testid="stMetricDelta"] {
-  color: #0a2d49 !important;
+/* Effet au survol */
+div[data-testid="stMetric"]:hover {
+    transform: scale(1.03);
+    transition: 0.3s ease;
 }
 </style>
 """, unsafe_allow_html=True)
 
 
 
-BLUE_SCALE = [
-    (0.00, "#eaf2fb"),
-    (0.10, "#d6e4f6"),
-    (0.20, "#c1d6f1"),
-    (0.35, "#8fb6e4"),
-    (0.50, "#5f97d6"),
-    (0.70, "#2f78c9"),
-    (0.85, "#155a9d"),
-    (1.00, "#0a2d49"),
+
+GREEN_SCALE = [
+    (0.00, "#F3FAE9"),
+    (0.10, "#E6F4D3"),
+    (0.20, "#D5EDB5"),
+    (0.35, "#B6E27F"),
+    (0.50, "#99D652"),
+    (0.70, "#7CC043"),  # ta couleur principale
+    (0.85, "#5AA52D"),
+    (1.00, "#1E6A0E"),
 ]
+
+
 
 
 st.divider()
@@ -145,10 +252,12 @@ df_steri_normal = load_csv(SHEET_URL_steri_NORMAL)
 # ==============================
 # SIDEBAR
 # ==============================
+# st.sidebar.image("logo2.png", use_container_width =True)
+
 st.sidebar.header("Filtres")
 CAPACITE = 20
 # st.sidebar.number_input("Capacité par véhicule", min_value=1, max_value=60, value=20)
-entreprise = st.sidebar.selectbox("Entreprise", ["Casa hub", "Logiprod", "HMI", "Steripharma"])
+entreprise = st.sidebar.selectbox("Site", ["Casa hub", "Logiprod", "HMI", "Steripharma"])
 
 # ==============================
 # CHOIX DU SITE
@@ -228,7 +337,7 @@ for i in range(0, len(shifts), 2):
             text="taux_pct",
             title=f"{shift} — Taux de remplissage (%)",
             color="taux_pct",
-            color_continuous_scale=BLUE_SCALE,   # 👈 nuances de bleu
+            color_continuous_scale=GREEN_SCALE,   
             range_color=(0, 100)                 # pour garder la même échelle sur tous les graphes
         )
         fig.update_traces(texttemplate="%{text:.0f}%", textposition="outside")
@@ -245,12 +354,11 @@ st.subheader("📋 Détails par Shift")
 
 def prepare_shift_table(df_shift, shift_name):
     if df_shift.empty:
-        return pd.DataFrame(columns=["Chauffeur", "Shift", "Distance", "Durée", "Nb personnes"])
+        return pd.DataFrame(columns=["Chauffeur", "Shift", "Durée", "Nb personnes"])
 
     df_shift = df_shift.rename(columns={
         "chauffeur": "Chauffeur",
         "shift": "Shift",
-        "distance": "Distance",
         "durée": "Durée"
     })
     df_shift["chauffeur_norm"] = df_shift["Chauffeur"].apply(normalize)
@@ -267,11 +375,61 @@ def prepare_shift_table(df_shift, shift_name):
         right_on=["shift", "chauffeur_norm"]
     )
 
-    merged = merged[["Chauffeur", "Shift", "Distance", "Durée", "nb_personnes"]]
+    merged = merged[["Chauffeur", "Shift", "Durée", "nb_personnes"]]
     merged = merged.rename(columns={"nb_personnes": "Nb personnes"})
     return merged
+    
 
 # --- TABLES ---
+# === Entêtes vertes pour st.dataframe (Streamlit 1.50–1.51) ===
+st.markdown(f"""
+<style>
+/* 1) Header cells (sélecteur principal) */
+div[data-testid="stDataFrame"] div[role="columnheader"] {{
+  background: linear-gradient(135deg, {PRIMARY} 0%, #5BAA29 100%) !important;
+  color: {TEXT_DARK} !important;
+  font-weight: 800 !important;
+  border-bottom: 2px solid #5BAA29 !important;
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+  display: flex; align-items: center; justify-content: center;
+  padding: 6px 0 !important;
+}}
+
+/* 2) Fallbacks (selon builds 1.50/1.51) */
+div[data-testid="stDataFrame"] [data-testid="stHeader"] > div,
+div[data-testid="stDataFrame"] div[aria-rowindex="1"] div[role="columnheader"] {{
+  background: linear-gradient(135deg, {PRIMARY} 0%, #5BAA29 100%) !important;
+  color: {TEXT_DARK} !important;
+  font-weight: 800 !important;
+}}
+
+/* 3) Texte à l’intérieur des headers */
+div[data-testid="stDataFrame"] div[role="columnheader"] p {{
+  color: {TEXT_DARK} !important;
+  font-weight: 800 !important;
+  margin: 0 !important;
+  text-transform: capitalize;
+}}
+
+/* 4) Corps + hover (optionnel) */
+div[data-testid="stDataFrame"] div[role="cell"] {{
+  border-bottom: 1px solid rgba(124,192,67,.15) !important;
+}}
+div[data-testid="stDataFrame"] div[role="row"]:hover div[role="cell"] {{
+  background-color: rgba(124,192,67,.08) !important;
+  transition: .25s ease;
+}}
+
+/* 5) Contour global (optionnel) */
+div[data-testid="stDataFrame"] {{
+  border: 1.5px solid rgba(124,192,67,.4) !important;
+  border-radius: 10px !important;
+  padding: 4px !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.15);
+}}
+</style>
+""", unsafe_allow_html=True)
 
 if entreprise == "Logiprod":
     st.markdown("### 🕐 Normal [🗺️](https://www.google.com/maps/d/edit?hl=fr&mid=1AWwS0Fh7kGqF45LLthDnNUw98p6ZhOA&ll=33.5164216889364%2C-7.668005000000008&z=11)", unsafe_allow_html=True)
