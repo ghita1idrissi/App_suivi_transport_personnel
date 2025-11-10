@@ -360,7 +360,7 @@ def prepare_shift_table(df_shift, shift_name):
     df_shift = df_shift.rename(columns={
         "chauffeur": "Chauffeur",
         "shift": "Shift",
-        "durée": "Durée"
+        "durée": "Durée",
         "distance":"Distance"
         
     })
