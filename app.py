@@ -4,6 +4,10 @@ import plotly.express as px
 import re
 import unicodedata
 import base64
+import time, requests, io
+
+if "cb" not in st.session_state:
+    st.session_state["cb"] = 0  # nonce pour casser le cache
 
 # ==============================
 # CONFIG
@@ -195,15 +199,29 @@ SHEET_URL_steri_NORMAL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID_ster
 # ==============================
 # UTILS
 # ==============================
-@st.cache_data
-def load_csv(url):
+# @st.cache_data
+# def load_csv(url):
+#     try:
+#         df = pd.read_csv(url)
+#         df.columns = df.columns.str.strip().str.lower()
+#         return df
+#     except Exception as e:
+#         st.warning(f"Erreur de chargement : {e}")
+#         return pd.DataFrame()
+@st.cache_data(show_spinner=False)
+def load_csv(url: str, cb: int) -> pd.DataFrame:
+    """Charge un CSV Google Sheets. Le paramètre cb casse le cache si tu appuies sur le bouton."""
     try:
-        df = pd.read_csv(url)
+        full_url = f"{url}&cb={cb}"  # 👈 change uniquement quand tu cliques sur le bouton
+        r = requests.get(full_url, headers={"Cache-Control": "no-cache"})
+        r.raise_for_status()
+        df = pd.read_csv(io.StringIO(r.text))
         df.columns = df.columns.str.strip().str.lower()
         return df
     except Exception as e:
         st.warning(f"Erreur de chargement : {e}")
         return pd.DataFrame()
+
 
 def normalize(text):
     if pd.isna(text):
@@ -227,34 +245,67 @@ def convert_duration_to_minutes(duration_str):
 # ==============================
 # LOAD DATA
 # ==============================
+# # --- CASA ---
+# df_casa = load_csv(SHEET_URL_CASA)
+# df_casa_shift1 = load_csv(SHEET_URL_CASA_SHIFT1)
+# df_casa_shift2 = load_csv(SHEET_URL_CASA_SHIFT2)
+
+# # --- LOGIPROD ---
+# df_logi = load_csv(SHEET_URL_LOGIPROD)
+# df_logi_normal = load_csv(SHEET_URL_LOGIPROD_NORMAL)
+# df_logi_shift1 = load_csv(SHEET_URL_LOGIPROD_SHIFT1)
+# df_logi_shift2 = load_csv(SHEET_URL_LOGIPROD_SHIFT2)
+
+# # --- HMI ---
+# df_hmi = load_csv(SHEET_URL_HMI)
+# df_hmi_normal = load_csv(SHEET_URL_HMI_NORMAL)
+# df_hmi_shift1 = load_csv(SHEET_URL_HMI_SHIFT1)
+# df_hmi_shift2 = load_csv(SHEET_URL_HMI_SHIFT2)
+# df_hmi_shift3 = load_csv(SHEET_URL_HMI_SHIFT3)
+
+# # --- Steripharma ---
+# df_steri = load_csv(SHEET_URL_steri)
+# df_steri_normal = load_csv(SHEET_URL_steri_NORMAL)
+
+
+def load(url: str) -> pd.DataFrame:
+    return load_csv(url, st.session_state["cb"])
 # --- CASA ---
-df_casa = load_csv(SHEET_URL_CASA)
-df_casa_shift1 = load_csv(SHEET_URL_CASA_SHIFT1)
-df_casa_shift2 = load_csv(SHEET_URL_CASA_SHIFT2)
+df_casa = load(SHEET_URL_CASA)
+df_casa_shift1 = load(SHEET_URL_CASA_SHIFT1)
+df_casa_shift2 = load(SHEET_URL_CASA_SHIFT2)
 
 # --- LOGIPROD ---
-df_logi = load_csv(SHEET_URL_LOGIPROD)
-df_logi_normal = load_csv(SHEET_URL_LOGIPROD_NORMAL)
-df_logi_shift1 = load_csv(SHEET_URL_LOGIPROD_SHIFT1)
-df_logi_shift2 = load_csv(SHEET_URL_LOGIPROD_SHIFT2)
+df_logi = load(SHEET_URL_LOGIPROD)
+df_logi_normal = load(SHEET_URL_LOGIPROD_NORMAL)
+df_logi_shift1 = load(SHEET_URL_LOGIPROD_SHIFT1)
+df_logi_shift2 = load(SHEET_URL_LOGIPROD_SHIFT2)
 
 # --- HMI ---
-df_hmi = load_csv(SHEET_URL_HMI)
-df_hmi_normal = load_csv(SHEET_URL_HMI_NORMAL)
-df_hmi_shift1 = load_csv(SHEET_URL_HMI_SHIFT1)
-df_hmi_shift2 = load_csv(SHEET_URL_HMI_SHIFT2)
-df_hmi_shift3 = load_csv(SHEET_URL_HMI_SHIFT3)
+df_hmi = load(SHEET_URL_HMI)
+df_hmi_normal = load(SHEET_URL_HMI_NORMAL)
+df_hmi_shift1 = load(SHEET_URL_HMI_SHIFT1)
+df_hmi_shift2 = load(SHEET_URL_HMI_SHIFT2)
+df_hmi_shift3 = load(SHEET_URL_HMI_SHIFT3)
 
 # --- Steripharma ---
-df_steri = load_csv(SHEET_URL_steri)
-df_steri_normal = load_csv(SHEET_URL_steri_NORMAL)
+df_steri = load(SHEET_URL_steri)
+df_steri_normal = load(SHEET_URL_steri_NORMAL)
 
 
 # ==============================
 # SIDEBAR
 # ==============================
-# st.sidebar.image("logo2.png", use_container_width =True)
+if st.sidebar.button("🔄 Actualiser les données"):
+    st.session_state["cb"] += 1      # change la clé de cache
+    st.cache_data.clear()            # vide le cache Streamlit
+    st.toast("✅ Données rechargées depuis Google Sheets")
 
+
+st.sidebar.caption(f"Dernière mise à jour : {time.strftime('%d/%m/%Y %H:%M:%S')}")
+
+
+# st.sidebar.image("logo2.png", use_container_width =True)
 st.sidebar.header("Filtres")
 CAPACITE = 20
 # st.sidebar.number_input("Capacité par véhicule", min_value=1, max_value=60, value=20)
